@@ -1,0 +1,4 @@
+FASTQ_by_lib/
+genomes/
+bowtie2_index/
+hs_err_pid*.log

@@ -1,6 +1,7 @@
 Example_FASTQ_folder/*
 !Example_FASTQ_folder/
 !Example_FASTQ_folder/FASTQ_by_lib/
+Example_FASTQ_folder/FASTQ_by_lib/*
 !Example_FASTQ_folder/FASTQ_by_lib/.gitkeep
 
 genomes/*
@@ -10,5 +11,8 @@ genomes/*
 bowtie2_index/*
 !bowtie2_index/
 !bowtie2_index/.gitkeep
+
+matqseq_primers.fa
+nextera_and_primers.fa
 
 hs_err_pid*.log

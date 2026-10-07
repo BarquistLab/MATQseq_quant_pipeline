@@ -21,7 +21,7 @@ import numpy as np
 
 ########################################## User parameters #####################################################
 lib_la = 'SINGLE'# Library layout
-folder_path = 'FASTQ_by_lib/'# Folder containing folder seq_files which has FastQ files to be quantified
+folder_path = 'Example_FASTQ_folder/'# Folder containing folder FASTQ_by_lib which has FastQ files to be quantified
 run_ids = ['Cdiff3', 'Cdiff4']# Names of the FastQ, omitting .fq.gz
 index_file = 'CP101905.2'# Name of index file
 annotation_file = 'CP010905.2_complete_180723_updatedGP.gff3'# Name of annatation file, with type designator
@@ -47,14 +47,14 @@ exists = os.path.isfile(folder_path + 'BBDuk_L/' + run_id + "_1"*int(lib_la == '
 if not exists:
 	os.system("mkdir " + folder_path + "BBDuk_L")
 	if lib_la == 'PAIRED':
-		os.system("bbduk.sh t=" + str(num_threads) + " in1=" + folder_path + "seq_files/" + run_id + "_1.fq.gz"+\
-		 			         		" in2=" + folder_path + "seq_files/" + run_id + "_2.fq.gz"+\
+		os.system("bbduk.sh t=" + str(num_threads) + " in1=" + folder_path + "FASTQ_by_lib/" + run_id + "_1.fq.gz"+\
+		 			         		" in2=" + folder_path + "FASTQ_by_lib/" + run_id + "_2.fq.gz"+\
 		 			         		" out1=" + folder_path + "BBDuk_L/" + run_id + "_1.fq.gz"+\
 		 			         		" out2=" + folder_path + "BBDuk_L/" + run_id + "_2.fq.gz ref=matqseq_primers.fa minlen=18 qtrim=rl trimq=20 ktrim=l k=17 mink=11 hdist=1 tpe tbo trimpolya=30")
 		 
 		
 	elif lib_la == 'SINGLE':
-		os.system("bbduk.sh t=" + str(num_threads) + " in=" + folder_path + "seq_files/" + run_id + ".fq.gz "+\
+		os.system("bbduk.sh t=" + str(num_threads) + " in=" + folder_path + "FASTQ_by_lib/" + run_id + ".fq.gz "+\
 			"out=" + folder_path + "BBDuk_L/" + run_id + ".fq.gz ref=matqseq_primers.fa minlen=18 qtrim=rl trimq=20 ktrim=l k=17 mink=11 hdist=1 trimpolya=30")
 else:
 	print("Already left-trimmed FastQ files")
@@ -181,7 +181,7 @@ if pass_1st_QC:
 	# --local tells Bowtie2 to use local alignment rather than end-to-end alignment,
 	# 	such that it will soft-clip bases on a read at the ends if those bases don't align well.
 	#
-	#################################### Samtools extra flags ##########################################
+	#################################### SAMtools extra flags ##########################################
 	#
 	# -b = output BAM format (binary version of SAM)
 	#

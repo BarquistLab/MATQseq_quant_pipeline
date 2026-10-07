@@ -1,9 +1,7 @@
-FASTQ_by_lib/*
-!FASTQ_by_lib/
-!FASTQ_by_lib/.gitkeep
-!FASTQ_by_lib/seq_files/
-FASTQ_by_lib/seq_files/*
-!FASTQ_by_lib/seq_files/.gitkeep
+Example_FASTQ_folder/*
+!Example_FASTQ_folder/
+!Example_FASTQ_folder/FASTQ_by_lib/
+!Example_FASTQ_folder/FASTQ_by_lib/.gitkeep
 
 genomes/*
 !genomes/

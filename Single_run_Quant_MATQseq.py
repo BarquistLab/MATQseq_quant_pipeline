@@ -42,10 +42,43 @@ if exists:
 	print(run_id + ' already quantified. Exiting...')
 	exit()
 
-# Trim left FastQ files
+############################## BBDuk parameters ##########################################################
+#
+# BBDuk parameters follow the published bacterial MATQ-seq preprocessing workflow:
+# Homberger et al., 2023, Improved Bacterial Single-Cell RNA-Seq through Automated
+# MATQ-Seq and Cas9-Based Removal of rRNA Reads.
+# https://doi.org/10.1128/mbio.03557-22
+#
+# The corresponding MATQ-seq protocol is described in:
+# Homberger et al., 2025, Transcriptomic profiling of individual bacteria by MATQ-seq.
+# https://doi.org/10.1038/s41596-025-01157-5
+#
+# First pass: trimming MATQ-seq primer sequences from the 5' end of reads.
+# The MATQ-seq primer sequences are supplied with ref=matqseq_primers.fa.
+# ktrim=l searches for primer-derived k-mers at the left end of reads and trims the matching sequence.
+# k=17 requires a 17-base k-mer match, while mink=11 allows shorter matches near the end of a read.
+# hdist=1 permits one mismatched base in the k-mer match, increasing tolerance to sequencing errors or minor sequence variation.
+# qtrim=rl trimq=20 performs quality trimming at both ends of the reads using a Q20 threshold.
+# minlen=18 removes reads that are shorter than 18 bases after trimming.
+# trimpolya=30 removes poly-A or poly-T tails of at least 30 bases.
+#
+# Second pass: trimming adapter and primer sequences from the 3' end of reads.
+# The adapter and primer sequences are supplied with ref=nextera_and_primers.fa.
+# ktrim=r searches for matching k-mers at the right end of reads and trims the matching sequence.
+# k=17, mink=11, and hdist=1 have the same roles as in the first pass.
+# qtrim=rl trimq=20 and minlen=18 are applied again after 3' trimming.
+#
+# For paired-end libraries, tbo additionally uses overlap between the paired reads to identify adapter sequences,
+# while tpe keeps both mates trimmed to the same length when trimming is triggered in only one mate.
+# These options are specific to paired-end processing and are therefore omitted for single-end libraries.
+#
+##########################################################################################################
+
+# Trim first pass
 exists = os.path.isfile(folder_path + 'BBDuk_L/' + run_id + "_1"*int(lib_la == 'PAIRED') + ".fq.gz")
 if not exists:
 	os.system("mkdir " + folder_path + "BBDuk_L")
+	
 	if lib_la == 'PAIRED':
 		os.system("bbduk.sh t=" + str(num_threads) + " in1=" + folder_path + "FASTQ_by_lib/" + run_id + "_1.fq.gz"+\
 		 			         		" in2=" + folder_path + "FASTQ_by_lib/" + run_id + "_2.fq.gz"+\
@@ -59,7 +92,7 @@ if not exists:
 else:
 	print("Already left-trimmed FastQ files")
 
-# Trim right FastQ files
+# Trim second pass
 exists = os.path.isfile(folder_path + 'BBDuk_L_R/' + run_id + "_1"*int(lib_la == 'PAIRED') + ".fq.gz")
 if not exists:
 	os.system("mkdir " + folder_path + "BBDuk_L_R")

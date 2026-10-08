@@ -3,7 +3,7 @@ A pipeline for the quantification of MATQ-seq data. This pipeline follows
 an example based on C. difficile. The sequence and annotation files are not
 provided in this tutorial for data protection reasons. To run this pipeline,
 these files in addition to the FastQ files to be qauntified will have to be 
-copied to the folders `genomes` (for both sequence and annotation files) and `FASTQ_by_lib`, respectively.
+copied to the folders `genomes` (for both sequence and annotation files) and `FASTQ_by_lib` under `Example_FASTQ_folder`, respectively.
 This pipeline was tested based on the following software versions,
 
 - Python 3.11.3
@@ -53,8 +53,9 @@ where the 0 indicates the index of the FastQ file in the list `run_ids`.
 
 This code will first run adapter trimming via `bbduk`, followed by `fastqc` for quality control, then finally `bowtie2` and `featureCounts` for quantification.
 This code will also check for already-complete steps, and skip ahead. Once complete, the FastQC report can be found next to the trimmed FastQ files in the `BBDuk_L_R`
-folder, and a summary of this report can be found in the `Example_FASTQ_folder` directory. See [Clostridioides difficile quantification and analysis](https://github.com/BarquistLab/C_diff_quantification_and_analysis)
-for further details on how to read this report.
+folder, and a summary of this report can be found in the `Example_FASTQ_folder` directory. 
+See [Clostridioides difficile quantification and analysis](https://github.com/BarquistLab/C_diff_quantification_and_analysis)
+for further details on reading this report.
 
 ### 1.3 Iterative quantification
 
@@ -70,4 +71,24 @@ done
 or submit the Python script as an array job on a compute cluster.
 
 ## 2 Count table assembly
+
+Finally, MATQseq_assemble_count_table.py assembles all .count files in the `featureCounts` output directory into summary tables for downstream analysis.
+This code reads in an ODS table to convert FASTQ file labels to conditions, and so it may be necessary to install a pandas dependency.
+
+```bash
+pip install odfpy
+```
+Then the script can be run as 
+
+```bash
+python MATQseq_assemble_count_table.py
+```
+
+The script reads the annotation file specified at the top of the script. Annotation information, including the user-defined feature ID, locus tag, gene name, and feature type, is retained for each quantified feature.
+
+Three Excel output tables are then generated in the specified output directory, e.g. `Example_FASTQ_folder`:
+
+Count_table.xlsx contains one column per annotated feature, with the feature name, locus tag, and biotype in the first three rows, followed by raw featureCounts values for each sample. Samples and features are ordered by their total counts in descending order.
+Biotype_gene_table.xlsx summarizes the number of detected features of each biotype in each sample. A feature is considered detected if its count is greater than zero.
+Biotype_count_table.xlsx summarizes the total number of assigned counts for each biotype in each sample.
 

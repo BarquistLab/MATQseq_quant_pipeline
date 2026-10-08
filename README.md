@@ -84,7 +84,7 @@ Then the script can be run as
 python MATQseq_assemble_count_table.py
 ```
 
-The script reads the annotation file specified at the top of the script. Annotation information, including the user-defined feature ID, locus tag, gene name, and feature type, is retained for each quantified feature.
+This script reads the annotation file specified at the top of the script. Annotation information, including the user-defined feature ID, locus tag, gene name, and feature type, is retained for each quantified feature.
 
 Three Excel output tables are then generated in the specified output directory, e.g. `Example_FASTQ_folder`:
 

@@ -89,6 +89,8 @@ The script reads the annotation file specified at the top of the script. Annotat
 Three Excel output tables are then generated in the specified output directory, e.g. `Example_FASTQ_folder`:
 
 Count_table.xlsx contains one column per annotated feature, with the feature name, locus tag, and biotype in the first three rows, followed by raw featureCounts values for each sample. Samples and features are ordered by their total counts in descending order.
+
 Biotype_gene_table.xlsx summarizes the number of detected features of each biotype in each sample. A feature is considered detected if its count is greater than zero.
+
 Biotype_count_table.xlsx summarizes the total number of assigned counts for each biotype in each sample.
 
